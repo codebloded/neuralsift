@@ -15,6 +15,7 @@ import SendIcon from "@mui/icons-material/Send";
 import TextFieldStyled from "components/styled/TextFieldStyled";
 import { UserContext } from "context/UserContext";
 import { styled } from "@mui/styles";
+import { Add } from "@mui/icons-material";
 
 export default function ItemMaster() {
   const [code, setCode] = React.useState("");
@@ -33,18 +34,7 @@ export default function ItemMaster() {
   const handleChange = (event) => {
     setSupplier(event.target.value);
   };
-  React.useEffect(() => {
-    Axios.get("/supplier")
-      .then(function (response) {
-        // handle success
-        console.log(response);
-        setData(response.data);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
-  }, []);
+  React.useEffect(() => {}, []);
   // console.log(data)
   const send = () => {
     const data = new FormData();
@@ -54,7 +44,6 @@ export default function ItemMaster() {
     data.append("category", category);
     data.append("sub category", subCategory);
     data.append("umo", umo);
-    data.append("price", price);
     data.append("moq", moq);
 
     Axios.post("http://localhost:5000/item", data, {
@@ -81,75 +70,6 @@ export default function ItemMaster() {
     >
       <Grid container spacing={3}>
         <Grid item xs={12} lg={6}>
-          <TextFieldStyled
-            // id="outlined-required"
-            label="Item code"
-            value={code}
-            eventCallback={(event) => setCode(event.target.value)}
-            placeholder="Code"
-            darkMode={darkMode}
-          />
-        </Grid>
-        <Grid item xs={12} lg={12}>
-          <TextFieldStyled
-            label="Item Description"
-            value={description}
-            eventCallback={(event) => setDescription(event.target.value)}
-            darkMode={darkMode}
-            width="500"
-          />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <TextField
-            select
-            label="Category"
-            InputLabelProps={{
-              style: { color: `${darkMode ? "#ffffff" : "black"}` },
-            }}
-            inputProps={{
-              style: { color: `${darkMode ? "#ffffff" : "black"}` },
-            }}
-            value={supplier}
-            onChange={handleChange}
-            variant="standard"
-            sx={{
-              width: 500,
-              maxWidth: "100%",
-            }}
-          >
-            {data.map((option) => (
-              <MenuItem value={option.supplier} key={option._id}>
-                {option.supplier}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <TextField
-            select
-            label="Sub Category"
-            InputLabelProps={{
-              style: { color: `${darkMode ? "#ffffff" : "black"}` },
-            }}
-            inputProps={{
-              style: { color: `${darkMode ? "#ffffff" : "black"}` },
-            }}
-            value={supplier}
-            onChange={handleChange}
-            variant="standard"
-            sx={{
-              width: 500,
-              maxWidth: "100%",
-            }}
-          >
-            {data.map((option) => (
-              <MenuItem value={option.supplier} key={option._id}>
-                {option.supplier}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid item xs={12} lg={6}>
           <TextField
             select
             label="Supplier"
@@ -169,57 +89,123 @@ export default function ItemMaster() {
             }}
           >
             {data.map((option) => (
-              <MenuItem value={option.supplier} key={option._id}>
-                {option.supplier}
+              <MenuItem value={option.supplierName} key={option._id}>
+                {option.supplierName}
               </MenuItem>
             ))}
           </TextField>
         </Grid>
-        <Grid item xs={12} lg={5}>
-          <TextFieldStyled
-            label="UMO"
-            value={umo}
-            width="500"
-            eventCallback={(event) => setUmo(event.target.value)}
-            darkMode={darkMode}
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <TextFieldStyled
-            label="Price Per Unit"
-            value={price}
-            width="500"
-            eventCallback={(event) => setPrice(event.target.value)}
-            darkMode={darkMode}
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <TextFieldStyled
-            label="MOQ"
-            value={moq}
-            width="500"
-            eventCallback={(event) => setMoq(event.target.value)}
-            darkMode={darkMode}
-            variant="standard"
-          />
-        </Grid>
-        <Grid item lg={12} alignContent="center">
-          <Button
-            variant="contained"
-            onClick={send}
-            sx={{
-              backgroundColor: "#2876c5",
-              position: "relative",
-              left: { xs: "80%", lg: "40%" },
-            }}
-            endIcon={<SendIcon />}
-          >
-            Submit
+        <Grid item xs={12} lg={12}>
+          <Button sx={{ color: "white" }} startIcon={<Add />}>
+            Create New Item
           </Button>
         </Grid>
       </Grid>
     </Container>
   );
 }
+
+// <Grid item xs={12} lg={6}>
+//         <TextFieldStyled
+//           // id="outlined-required"
+//           label="Item code"
+//           value={code}
+//           eventCallback={(event) => setCode(event.target.value)}
+//           placeholder="Code"
+//           darkMode={darkMode}
+//         />
+//       </Grid>
+//       <Grid item xs={12} lg={12}>
+//         <TextFieldStyled
+//           label="Item Description"
+//           value={description}
+//           eventCallback={(event) => setDescription(event.target.value)}
+//           darkMode={darkMode}
+//           width="500"
+//         />
+//       </Grid>
+//       <Grid item xs={12} lg={6}>
+//         <TextField
+//           select
+//           label="Category"
+//           InputLabelProps={{
+//             style: { color: `${darkMode ? "#ffffff" : "black"}` },
+//           }}
+//           inputProps={{
+//             style: { color: `${darkMode ? "#ffffff" : "black"}` },
+//           }}
+//           value={supplier}
+//           onChange={handleChange}
+//           variant="standard"
+//           sx={{
+//             width: 500,
+//             maxWidth: "100%",
+//           }}
+//         >
+//           {data.map((option) => (
+//             <MenuItem value={option.supplier} key={option._id}>
+//               {option.supplier}
+//             </MenuItem>
+//           ))}
+//         </TextField>
+//       </Grid>
+//       <Grid item xs={12} lg={6}>
+//         <TextField
+//           select
+//           label="Sub Category"
+//           InputLabelProps={{
+//             style: { color: `${darkMode ? "#ffffff" : "black"}` },
+//           }}
+//           inputProps={{
+//             style: { color: `${darkMode ? "#ffffff" : "black"}` },
+//           }}
+//           value={supplier}
+//           onChange={handleChange}
+//           variant="standard"
+//           sx={{
+//             width: 500,
+//             maxWidth: "100%",
+//           }}
+//         >
+//           {data.map((option) => (
+//             <MenuItem value={option.supplier} key={option._id}>
+//               {option.supplier}
+//             </MenuItem>
+//           ))}
+//         </TextField>
+//       </Grid>
+
+//       <Grid item xs={12} lg={5}>
+//         <TextFieldStyled
+//           label="UMO"
+//           value={umo}
+//           width="500"
+//           eventCallback={(event) => setUmo(event.target.value)}
+//           darkMode={darkMode}
+//           variant="standard"
+//         />
+//       </Grid>
+//       <Grid item xs={12} lg={6}>
+//         <TextFieldStyled
+//           label="MOQ"
+//           value={moq}
+//           width="500"
+//           eventCallback={(event) => setMoq(event.target.value)}
+//           darkMode={darkMode}
+//           variant="standard"
+//         />
+//       </Grid>
+//       <Grid item lg={12} alignContent="center">
+//         <Button
+//           variant="contained"
+//           onClick={send}
+//           sx={{
+//             backgroundColor: "#2876c5",
+//             position: "relative",
+//             left: { xs: "80%", lg: "40%" },
+//           }}
+//           endIcon={<SendIcon />}
+//         >
+//           Submit
+//         </Button>
+//       </Grid>

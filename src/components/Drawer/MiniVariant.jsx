@@ -29,6 +29,7 @@ import Typography from "@mui/material/Typography";
 import { UserContext } from "context/UserContext";
 import brandLogo from "../../images/logox.png";
 import { menu } from "../menu";
+import { ToastContainer } from "react-toastify";
 
 const drawerWidth = 280;
 
@@ -115,12 +116,10 @@ export default function MiniVariant() {
 
   const handleDrawerOpen = () => {
     setOpen(true);
-    console.log("open", open);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
-    console.log("close", open);
   };
 
   const [auth, setAuth] = React.useState(true);
@@ -320,27 +319,32 @@ export default function MiniVariant() {
         sx={{
           display: { xs: "block", sm: "block", md: "block", lg: "none" },
           overflowY: "hidden",
-
-          "& .MuiDrawer-paper": {
-            background: `${darkMode ? "#101317" : "#2C5CB4"}`,
-          },
         }}
       >
         <DrawerComponent />
       </SwipeableDrawer>
 
-      <Grid item xs={12} sm={12} md={12} lg={12}>
+      <Grid
+        sx={{
+          backgroundColor:
+            theme.palette.mode === "dark"
+              ? theme.palette.custom.primary.main
+              : theme.palette.custom.primary.secondary,
+        }}
+        item
+        xs={12}
+        sm={12}
+        md={12}
+        lg={12}
+      >
         <div
           style={{
             minHeight: "100vh",
-            paddingTop: "20px",
-            paddingBottom: "20px",
-            overflowY: "hidden",
+            height: "100%",
+            marginTop: "6em",
           }}
         >
-          <React.Fragment>
-            <Outlet />
-          </React.Fragment>
+          <Outlet />
         </div>
       </Grid>
     </Box>

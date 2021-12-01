@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Grid, styled } from "@mui/material";
+import { Button, Grid, styled } from "@mui/material";
 import {
   ThemeProvider,
   createTheme,
@@ -11,7 +11,6 @@ import AuthScreen from "./AuthScreen";
 import { Box } from "@mui/system";
 import CssBaseline from "@mui/material/CssBaseline";
 
-
 import MiniVariant from "components/Drawer/MiniVariant";
 
 import React from "react";
@@ -19,10 +18,12 @@ import { Scrollbars } from "react-custom-scrollbars";
 
 import { UserContext } from "context/UserContext";
 
-import Supplier from "screens/Supplier Master/Supplier";
-import Items from "screens/Item Master/Items";
-import Branches from "screens/Branches Master/Branches";
-import User from "screens/User Master/User";
+import Supplier from "screens/supplierPanel/Supplier";
+import Items from "screens/itemPanel/Items";
+import BranchMaster from "screens/branchPanel/BranchMaster";
+import User from "screens/userPanel/User";
+
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const { darkMode, setDarkMode } = useContext(UserContext);
@@ -48,6 +49,7 @@ function App() {
           logoRedSecond: "rgba(171,15,37,0.6)",
           logoRedFirstW: "rgba(222,60,77,1)",
           logoRedSecondW: "rgba(171,15,37,1)",
+          darkPaperBg: "#161B22",
         },
       },
     },
@@ -102,9 +104,8 @@ function App() {
             <Route exact path="/" element={<MiniVariant />}>
               <Route path="supplier/master" element={<Supplier />} />
               <Route path="item/master" element={<Items />} />
-              <Route path="branch/master" element={<Branches />} />
+              <Route path="branch/master" element={<BranchMaster />} />
               <Route path="user/new" element={<User />} />
-
             </Route>
             {/* <Route exact path="/auth" element={<AuthScreen />} />  */}
           </Routes>

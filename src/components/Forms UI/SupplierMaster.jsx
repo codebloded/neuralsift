@@ -63,7 +63,7 @@ export default function SupplierMaster() {
       tanDoc,
       bankDoc,
       gstDoc,
-      single
+      single,
     });
 
     const data = new FormData();
@@ -103,7 +103,6 @@ export default function SupplierMaster() {
       sx={{
         padding: "4em 1em",
         // border: "1px solid red",
-        backgroundColor: `${darkMode ? "#161B22;" : "#ffffff"}`,
         borderRadius: "15px",
         borderLeft: "7px solid #2f8deb",
       }}
@@ -132,6 +131,7 @@ export default function SupplierMaster() {
         <Grid item xs={6}>
           <TextFieldStyled
             value={phone}
+            type="number"
             label="Phone No."
             width="500"
             eventCallback={(event) => setPhone(event.target.value)}
@@ -141,6 +141,7 @@ export default function SupplierMaster() {
         <Grid item xs={12} lg={6}>
           <TextFieldStyled
             label="CIN"
+            type="number"
             value={cin}
             eventCallback={(event) => setCin(event.target.value)}
             width="400"
@@ -151,6 +152,7 @@ export default function SupplierMaster() {
           <TextFieldStyled
             label="PAN"
             value={pan}
+            type="number"
             eventCallback={(event) => setPan(event.target.value)}
             width="400"
             darkMode={darkMode}
@@ -159,6 +161,7 @@ export default function SupplierMaster() {
         <Grid item xs={12} lg={6}>
           <TextFieldStyled
             label="TAN"
+            type="number"
             eventCallback={(event) => setTan(event.target.value)}
             value={tan}
             width="400"
@@ -178,6 +181,7 @@ export default function SupplierMaster() {
           <TextFieldStyled
             label="Account No."
             value={accountNumber}
+            type="number"
             eventCallback={(event) => setAccountNumber(event.target.value)}
             width="400"
             darkMode={darkMode}
