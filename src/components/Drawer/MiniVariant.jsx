@@ -29,7 +29,6 @@ import Typography from "@mui/material/Typography";
 import { UserContext } from "context/UserContext";
 import brandLogo from "../../images/logox.png";
 import { menu } from "../menu";
-import { ToastContainer } from "react-toastify";
 
 const drawerWidth = 280;
 

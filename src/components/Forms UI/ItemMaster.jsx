@@ -105,107 +105,109 @@ export default function ItemMaster() {
   );
 }
 
-// <Grid item xs={12} lg={6}>
-//         <TextFieldStyled
-//           // id="outlined-required"
-//           label="Item code"
-//           value={code}
-//           eventCallback={(event) => setCode(event.target.value)}
-//           placeholder="Code"
-//           darkMode={darkMode}
-//         />
-//       </Grid>
-//       <Grid item xs={12} lg={12}>
-//         <TextFieldStyled
-//           label="Item Description"
-//           value={description}
-//           eventCallback={(event) => setDescription(event.target.value)}
-//           darkMode={darkMode}
-//           width="500"
-//         />
-//       </Grid>
-//       <Grid item xs={12} lg={6}>
-//         <TextField
-//           select
-//           label="Category"
-//           InputLabelProps={{
-//             style: { color: `${darkMode ? "#ffffff" : "black"}` },
-//           }}
-//           inputProps={{
-//             style: { color: `${darkMode ? "#ffffff" : "black"}` },
-//           }}
-//           value={supplier}
-//           onChange={handleChange}
-//           variant="standard"
-//           sx={{
-//             width: 500,
-//             maxWidth: "100%",
-//           }}
-//         >
-//           {data.map((option) => (
-//             <MenuItem value={option.supplier} key={option._id}>
-//               {option.supplier}
-//             </MenuItem>
-//           ))}
-//         </TextField>
-//       </Grid>
-//       <Grid item xs={12} lg={6}>
-//         <TextField
-//           select
-//           label="Sub Category"
-//           InputLabelProps={{
-//             style: { color: `${darkMode ? "#ffffff" : "black"}` },
-//           }}
-//           inputProps={{
-//             style: { color: `${darkMode ? "#ffffff" : "black"}` },
-//           }}
-//           value={supplier}
-//           onChange={handleChange}
-//           variant="standard"
-//           sx={{
-//             width: 500,
-//             maxWidth: "100%",
-//           }}
-//         >
-//           {data.map((option) => (
-//             <MenuItem value={option.supplier} key={option._id}>
-//               {option.supplier}
-//             </MenuItem>
-//           ))}
-//         </TextField>
-//       </Grid>
+{
+  /* <Grid item xs={12} lg={6}>
+        <TextFieldStyled
+          // id="outlined-required"
+          label="Item code"
+          value={code}
+          eventCallback={(event) => setCode(event.target.value)}
+          placeholder="Code"
+          darkMode={darkMode}
+        />
+      </Grid>
+      <Grid item xs={12} lg={12}>
+        <TextFieldStyled
+          label="Item Description"
+          value={description}
+          eventCallback={(event) => setDescription(event.target.value)}
+          darkMode={darkMode}
+          width="500"
+        />
+      </Grid>
+      <Grid item xs={12} lg={6}>
+        <TextField
+          select
+          label="Category"
+          InputLabelProps={{
+            style: { color: `${darkMode ? "#ffffff" : "black"}` },
+          }}
+          inputProps={{
+            style: { color: `${darkMode ? "#ffffff" : "black"}` },
+          }}
+          value={supplier}
+          onChange={handleChange}
+          variant="standard"
+          sx={{
+            width: 500,
+            maxWidth: "100%",
+          }}
+        >
+          {data.map((option) => (
+            <MenuItem value={option.supplier} key={option._id}>
+              {option.supplier}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Grid>
+      <Grid item xs={12} lg={6}>
+        <TextField
+          select
+          label="Sub Category"
+          InputLabelProps={{
+            style: { color: `${darkMode ? "#ffffff" : "black"}` },
+          }}
+          inputProps={{
+            style: { color: `${darkMode ? "#ffffff" : "black"}` },
+          }}
+          value={supplier}
+          onChange={handleChange}
+          variant="standard"
+          sx={{
+            width: 500,
+            maxWidth: "100%",
+          }}
+        >
+          {data.map((option) => (
+            <MenuItem value={option.supplier} key={option._id}>
+              {option.supplier}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Grid>
 
-//       <Grid item xs={12} lg={5}>
-//         <TextFieldStyled
-//           label="UMO"
-//           value={umo}
-//           width="500"
-//           eventCallback={(event) => setUmo(event.target.value)}
-//           darkMode={darkMode}
-//           variant="standard"
-//         />
-//       </Grid>
-//       <Grid item xs={12} lg={6}>
-//         <TextFieldStyled
-//           label="MOQ"
-//           value={moq}
-//           width="500"
-//           eventCallback={(event) => setMoq(event.target.value)}
-//           darkMode={darkMode}
-//           variant="standard"
-//         />
-//       </Grid>
-//       <Grid item lg={12} alignContent="center">
-//         <Button
-//           variant="contained"
-//           onClick={send}
-//           sx={{
-//             backgroundColor: "#2876c5",
-//             position: "relative",
-//             left: { xs: "80%", lg: "40%" },
-//           }}
-//           endIcon={<SendIcon />}
-//         >
-//           Submit
-//         </Button>
-//       </Grid>
+      <Grid item xs={12} lg={5}>
+        <TextFieldStyled
+          label="UMO"
+          value={umo}
+          width="500"
+          eventCallback={(event) => setUmo(event.target.value)}
+          darkMode={darkMode}
+          variant="standard"
+        />
+      </Grid>
+      <Grid item xs={12} lg={6}>
+        <TextFieldStyled
+          label="MOQ"
+          value={moq}
+          width="500"
+          eventCallback={(event) => setMoq(event.target.value)}
+          darkMode={darkMode}
+          variant="standard"
+        />
+      </Grid>
+      <Grid item lg={12} alignContent="center">
+        <Button
+          variant="contained"
+          onClick={send}
+          sx={{
+            backgroundColor: "#2876c5",
+            position: "relative",
+            left: { xs: "80%", lg: "40%" },
+          }}
+          endIcon={<SendIcon />}
+        >
+          Submit
+        </Button>
+      </Grid> */
+}

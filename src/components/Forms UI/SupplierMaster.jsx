@@ -303,18 +303,18 @@ export default function SupplierMaster() {
           </FormLabel>
           <RadioGroup row aria-label="gender" name="row-radio-buttons-group">
             <FormControlLabel
-              value="Single Branch"
+              value="Single"
               onChange={(event) => setSingle(event.target.value)}
               sx={{ color: `${darkMode ? "#ffffff" : "black"}` }}
               control={<Radio />}
-              label="Single Branch"
+              label="Single"
             />
             <FormControlLabel
-              value="Multiple Branch"
+              value="Multiple"
               onChange={(event) => setSingle(event.target.value)}
               sx={{ color: `${darkMode ? "#ffffff" : "black"}` }}
               control={<Radio />}
-              label="Multiple Branch"
+              label="Multiple"
             />
           </RadioGroup>
         </Grid>
@@ -323,7 +323,7 @@ export default function SupplierMaster() {
 
         {/* // cin button */}
         <Grid container sx={{ padding: "20px" }} spacing={3}>
-          {single === "Single Branch" ? (
+          {single === "Single" ? (
             <>
               <Grid item xs={12} lg={9}>
                 <TextFieldStyled

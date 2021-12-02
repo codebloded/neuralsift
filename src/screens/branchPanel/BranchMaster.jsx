@@ -1,33 +1,36 @@
+import { Add, CenterFocusStrongRounded, Clear } from "@mui/icons-material";
 import {
+  Autocomplete,
   Button,
-  Grid,
-  Input,
-  Stack,
-  Typography,
   Container,
   Divider,
-  TextField,
-  MenuItem,
-  Autocomplete,
+  Grid,
   IconButton,
+  Input,
+  MenuItem,
   Paper,
+  Stack,
+  TextField,
+  Typography,
   useTheme,
 } from "@mui/material";
-import PaperStyled from "components/styled/PaperStyled";
-// import { ToastContainer,  } from "react-toastify";
+import React, { Fragment, useContext, useEffect, useState } from "react";
+import {
+  getAllSuppliers,
+  getSupplierDetails,
+  handleCreateNewBranch,
+} from "api/apis";
 
 import Axios from "axios";
-import { getAllSuppliers, getSupplierDetails } from "api/apis";
-import { Add, CenterFocusStrongRounded, Clear } from "@mui/icons-material";
 import { Box } from "@mui/system";
-import { UserContext } from "context/UserContext";
-import toast from "components/styled/ToastConfig";
-
-import React, { useContext, useEffect, useState } from "react";
-import TextFieldStyled from "components/styled/TextFieldStyled";
 import ContainerStyled from "components/styled/ContainerStyled";
+import PaperStyled from "components/styled/PaperStyled";
+import TextFieldStyled from "components/styled/TextFieldStyled";
+import { UserContext } from "context/UserContext";
+import { useSnackbar } from "notistack";
 
 export default function Branches() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const theme = useTheme();
   const { darkMode, baseUrl } = useContext(UserContext);
   const [gst, setGst] = useState("");
@@ -37,33 +40,70 @@ export default function Branches() {
   const [address, setAddress] = useState("");
   const [filteredSuppliers, setFilteredSuppliers] = useState([]);
   const [supplier, setSupplier] = useState("");
-  console.log(gstDoc);
   const [showRow, setShowRow] = useState(false);
   const [clear, setClear] = useState(false);
-
   const [supplierData, setSupplierData] = useState(null);
-
   const [supplierID, setSupplierID] = useState(null);
-  console.log(supplierID);
+
   useEffect(() => {
-    getAllSuppliers().then((res) => {
-      if (res) {
-        setData(res.data.data);
-        setFilteredSuppliers(res.data.data);
-      }
-    });
+    getAllSuppliers()
+      .then((res) => {
+        if (res !== null) {
+          setData(res.data.data);
+          setFilteredSuppliers(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
-  const handleSubmit = () => {
-    if (
-      !gstDoc ||
-      !gst ||
-      !address ||
-      !branchName ||
-      !supplierID ||
-      supplierID !== "Multiple Branch"
-    )
-      return;
+  const handleSubmit = async () => {
+    console.log({ gstDoc, gst, address, branchName, supplierID });
+    // if (
+    //   !gstDoc ||
+    //   !gst ||
+    //   !address ||
+    //   !branchName ||
+    //   !supplierID ||
+    //   supplierData.typeOfBranches === "single"
+    // )
+    //   return;
+    console.log("reached");
+
+    const formData = new FormData();
+    formData.append("gst", gst);
+    formData.append("address", address);
+    formData.append("branchName", branchName);
+    formData.append("id", supplierID);
+    formData.append("file", gstDoc);
+    console.log(supplierID);
+
+    try {
+      handleCreateNewBranch(formData).then((res) => {
+        console.log(res);
+        if (res.data.status === true) {
+          enqueueSnackbar(res.data.message, {
+            variant: "success",
+            autoHideDuration: 2000,
+          });
+          setShowRow(false);
+          setGst("");
+          setGstDoc(null);
+          setAddress("");
+          setBranchName("");
+        }
+        if (res.data.status === false) {
+          console.log(res);
+          enqueueSnackbar(res.data.message, {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        }
+      });
+    } catch (err) {
+      console.log(err, err.message);
+    }
   };
   const handleSupplierSearch = (event) => {
     if (event.target.value === "") {
@@ -79,7 +119,9 @@ export default function Branches() {
   useEffect(() => {
     if (supplierID === null || supplierID === "") return;
     getSupplierDetails(supplierID).then((res) => {
-      setSupplierData(res.data.data);
+      if (res !== null) {
+        setSupplierData(res.data.data);
+      }
     });
   }, [supplierID]);
   return (
@@ -114,13 +156,6 @@ export default function Branches() {
                 >
                   <Grid container spacing={3}>
                     <Grid item xs={12} lg={6}>
-                      <Button
-                        onClick={() => {
-                          toast.error("You do not have permission to do that");
-                        }}
-                      >
-                        clkick
-                      </Button>
                       <Autocomplete
                         freeSolo
                         onChange={(event, value) => {
@@ -140,19 +175,37 @@ export default function Branches() {
                         )}
                       />
                       <Box sx={{ mt: 2 }}>
-                        {supplierData !== null &&
-                        supplierData.typeOfBranches === "Single Branch" ? (
-                          <Typography variant="subtitle1" color="error">
-                            You are not eligible for creating a branch. Since
-                            you have chosen your type of branch as Single during
-                            creation.
-                          </Typography>
-                        ) : (
-                          <Typography variant="subtitle1" color="green">
-                            You are eligible , Please proceed by clicking on{" "}
-                            <Add sx={{ color: "white" }} /> {"  "}
-                            to create a new branch
-                          </Typography>
+                        {supplierData !== null && (
+                          <>
+                            {typeof supplierData === "object" && (
+                              <>
+                                {supplierData.typeOfBranches === "single" ? (
+                                  <Typography variant="subtitle1" color="error">
+                                    You are not eligible for creating a branch.
+                                    Since you have chosen your type of branch as
+                                    Single during creation.
+                                  </Typography>
+                                ) : (
+                                  <Typography variant="subtitle1" color="green">
+                                    You are eligible , Please proceed by
+                                    clicking on{" "}
+                                    {console.log(supplierData.typeOfBranches)}
+                                    <Add
+                                      sx={{
+                                        color:
+                                          theme.palette.mode === "dark"
+                                            ? theme.palette.custom.primary
+                                                .secondary
+                                            : theme.palette.custom.primary
+                                                .logoBlueFirstW,
+                                      }}
+                                    />
+                                    to create a new branch
+                                  </Typography>
+                                )}
+                              </>
+                            )}
+                          </>
                         )}
                       </Box>
                     </Grid>
@@ -163,10 +216,14 @@ export default function Branches() {
                       >
                         {showRow ? (
                           <Paper
+                            elevation={0}
                             sx={{
                               background: "transparent",
                               borderRadius: "10px",
-                              border: "1px solid rgba(255, 255, 255, 0.3)",
+                              border:
+                                theme.palette.mode === "dark"
+                                  ? "1px solid rgba(255,255,255,0.3)"
+                                  : "1px solid rgba(0,0,0,0.3)",
                               py: 3,
                               px: 3,
                               my: 2,
@@ -185,11 +242,19 @@ export default function Branches() {
                                 NEW BRANCH FORM
                               </Typography>
                               <TextFieldStyled
+                                onChange={(e) => setBranchName(e.target.value)}
                                 label="Branch Name"
                                 sx={{ margin: "1em 1em" }}
                               />
-                              <TextFieldStyled label="Address" />
-                              <TextFieldStyled label="GST" placeholder="Code" />
+                              <TextFieldStyled
+                                label="Address"
+                                onChange={(e) => setAddress(e.target.value)}
+                              />
+                              <TextFieldStyled
+                                label="GST"
+                                placeholder="Code"
+                                onChange={(e) => setGst(e.target.value)}
+                              />
                               <Box>
                                 {gstDoc === null && (
                                   <label htmlFor="gst">
@@ -234,22 +299,52 @@ export default function Branches() {
                                     </IconButton>
                                   </Stack>
                                 ) : null}
-                                <Button onClick={handleSubmit}>Submit</Button>
+                                {console.log(gstDoc, gst, address)}
+                              </Box>
+                              <Box sx={{ my: 2 }}>
+                                <Stack direction="column" spacing={2}>
+                                  {gstDoc !== null &&
+                                  gst !== "" &&
+                                  address !== "" ? (
+                                    <Button onClick={handleSubmit}>
+                                      Submit
+                                    </Button>
+                                  ) : null}
+                                  <Button onClick={(e) => setShowRow(false)}>
+                                    DISCARD
+                                  </Button>
+                                </Stack>
                               </Box>
                             </Stack>
                           </Paper>
                         ) : (
-                          <IconButton
-                            onClick={() => setShowRow(!showRow)}
-                            sx={{
-                              borderRadius: "15%",
-                              backgroundColor: "transparent",
-                              border: "1px solid rgba(255,255,255,0.5)",
-                              p: 2,
-                            }}
-                          >
-                            <Add />
-                          </IconButton>
+                          <>
+                            {supplierData !== null && (
+                              <>
+                                {console.log(typeof supplierData)}
+                                {console.log(supplierData)}
+                                {typeof supplierData === "object" && (
+                                  <>
+                                    {supplierData.typeOfBranches ===
+                                      "multiple" && (
+                                      <IconButton
+                                        onClick={() => setShowRow(!showRow)}
+                                        sx={{
+                                          borderRadius: "15%",
+                                          backgroundColor: "transparent",
+                                          border:
+                                            "1px solid rgba(255,255,255,0.5)",
+                                          p: 2,
+                                        }}
+                                      >
+                                        <Add />
+                                      </IconButton>
+                                    )}
+                                  </>
+                                )}
+                              </>
+                            )}
+                          </>
                         )}
                       </Box>
                     </Grid>
@@ -269,8 +364,6 @@ export default function Branches() {
                 lg={12}
                 sx={{ display: { xs: "none", sm: "none", md: "block" } }}
               >
-                {/* <YourCard /> */}
-
                 <Typography
                   variant="h3"
                   sx={{
@@ -290,7 +383,6 @@ export default function Branches() {
                     height: "100%",
                   }}
                 >
-                  {/* Side GRid */}
                   <ContainerStyled sx={{ py: 2 }}>
                     <Box>
                       <Typography
@@ -337,12 +429,7 @@ export default function Branches() {
                         justifyContent: "flex-end",
                         my: 2,
                       }}
-                    >
-                      <Stack direction="row" spacing={3}>
-                        <Button>DISCARD</Button>
-                        <Button>Create</Button>
-                      </Stack>
-                    </Box>
+                    ></Box>
                   </ContainerStyled>
                 </PaperStyled>
               </Grid>

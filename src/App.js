@@ -1,29 +1,24 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Button, Grid, styled } from "@mui/material";
+import { Button, Slide, styled } from "@mui/material";
+import React, { Fragment } from "react";
+import { Route, Routes } from "react-router-dom";
 import {
   ThemeProvider,
   createTheme,
   responsiveFontSizes,
 } from "@mui/material/styles";
-import { useContext, useEffect, useState } from "react";
 
 import AuthScreen from "./AuthScreen";
-import { Box } from "@mui/system";
-import CssBaseline from "@mui/material/CssBaseline";
-
-import MiniVariant from "components/Drawer/MiniVariant";
-
-import React from "react";
-import { Scrollbars } from "react-custom-scrollbars";
-
-import { UserContext } from "context/UserContext";
-
-import Supplier from "screens/supplierPanel/Supplier";
-import Items from "screens/itemPanel/Items";
 import BranchMaster from "screens/branchPanel/BranchMaster";
+import CssBaseline from "@mui/material/CssBaseline";
+import Items from "screens/itemPanel/Items";
+import MiniVariant from "components/Drawer/MiniVariant";
+import { Scrollbars } from "react-custom-scrollbars";
+import { SnackbarProvider } from "notistack";
+import Supplier from "screens/supplierPanel/Supplier";
+import CategoryMaster from "screens/itemPanel/CategoryMaster";
 import User from "screens/userPanel/User";
-
-import { ToastContainer } from "react-toastify";
+import { UserContext } from "context/UserContext";
+import { useContext } from "react";
 
 function App() {
   const { darkMode, setDarkMode } = useContext(UserContext);
@@ -100,15 +95,34 @@ function App() {
           renderThumbHorizontal={renderThumb}
           renderThumbVertical={renderThumb}
         >
-          <Routes>
-            <Route exact path="/" element={<MiniVariant />}>
-              <Route path="supplier/master" element={<Supplier />} />
-              <Route path="item/master" element={<Items />} />
-              <Route path="branch/master" element={<BranchMaster />} />
-              <Route path="user/new" element={<User />} />
-            </Route>
-            {/* <Route exact path="/auth" element={<AuthScreen />} />  */}
-          </Routes>
+          <SnackbarProvider
+            style={{ marginTop: "5em" }}
+            maxSnack={3}
+            autoHideDuration={3000}
+            hideIconVariant={false}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            TransitionComponent={Slide}
+            iconVariant={{
+              success: "✅",
+              error: "✖️",
+              warning: "⚠️",
+              info: "ℹ️",
+            }}
+          >
+            <Routes>
+              <Route exact path="/" element={<MiniVariant />}>
+                <Route path="supplier/master" element={<Supplier />} />
+                <Route path="item/master" element={<Items />} />
+                <Route path="category/create" element={<CategoryMaster />} />
+                <Route path="branch/master" element={<BranchMaster />} />
+                <Route path="user/new" element={<User />} />
+              </Route>
+              {/* <Route exact path="/auth" element={<AuthScreen />} />  */}
+            </Routes>
+          </SnackbarProvider>
         </Scrollbars>
       </ThemeProvider>
     </div>

@@ -6,10 +6,14 @@ export const getAllSuppliers = async () => {
   try {
     const suppliers = await Axios.get(`${url}/supplier/data`);
 
-    return suppliers;
+    if (suppliers) {
+      return suppliers;
+    } else {
+      return [];
+    }
   } catch (error) {
     console.log(error.message);
-    return [];
+    return null;
   }
 };
 export const getSupplierDetails = async (id) => {
@@ -19,6 +23,16 @@ export const getSupplierDetails = async (id) => {
     return data;
   } catch (error) {
     console.log(error.message);
-    return [];
+    return null;
+  }
+};
+
+export const handleCreateNewBranch = (formData) => {
+  try {
+    const data = Axios.post(`${url}/new/branch`, formData);
+    return data;
+  } catch (error) {
+    console.log(error.message);
+    return null;
   }
 };

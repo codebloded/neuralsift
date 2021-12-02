@@ -34,6 +34,10 @@ export const menu = [
         title: "Item Data",
         link: "/item/data",
       },
+      {
+        title: "Category Master",
+        link: "/category/create",
+      },
     ],
   },
   {
