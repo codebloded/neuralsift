@@ -14,7 +14,7 @@ import Items from "screens/itemPanel/Items";
 import MiniVariant from "components/Drawer/MiniVariant";
 import { Scrollbars } from "react-custom-scrollbars";
 import { SnackbarProvider } from "notistack";
-import Supplier from "screens/supplierPanel/Supplier";
+import SupplierMaster from "screens/supplierPanel/SupplierMaster";
 import CategoryMaster from "screens/itemPanel/CategoryMaster";
 import User from "screens/userPanel/User";
 import { UserContext } from "context/UserContext";
@@ -101,7 +101,7 @@ function App() {
             autoHideDuration={3000}
             hideIconVariant={false}
             anchorOrigin={{
-              vertical: "top",
+              vertical: "bottom",
               horizontal: "right",
             }}
             TransitionComponent={Slide}
@@ -114,7 +114,7 @@ function App() {
           >
             <Routes>
               <Route exact path="/" element={<MiniVariant />}>
-                <Route path="supplier/master" element={<Supplier />} />
+                <Route path="supplier/master" element={<SupplierMaster />} />
                 <Route path="item/master" element={<Items />} />
                 <Route path="category/create" element={<CategoryMaster />} />
                 <Route path="branch/master" element={<BranchMaster />} />

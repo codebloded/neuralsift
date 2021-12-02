@@ -19,21 +19,45 @@ import {
   Table,
   TableBody,
 } from "@mui/material";
+import MailIcon from "@mui/icons-material/Mail";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
+import Label from "@mui/icons-material/Label";
+import CopyrightIcon from "@mui/icons-material/Copyright";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import InfoIcon from "@mui/icons-material/Info";
+import ForumIcon from "@mui/icons-material/Forum";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import SendIcon from "@mui/icons-material/Send";
+import TreeItem from "@mui/lab/TreeItem";
+import TreeViewItemStyled from "components/styled/TreeViewItemStyled";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import PaperStyled from "components/styled/PaperStyled";
 // import { ToastContainer,  } from "react-toastify";
 
 import Axios from "axios";
-import { getAllSuppliers, getCategory } from "api/apis";
-import { Add, CenterFocusStrongRounded, Clear } from "@mui/icons-material";
+import { getAllSuppliers, getCategories } from "api/apis";
+import {
+  Check,
+  Add,
+  CenterFocusStrongRounded,
+  Clear,
+  Close,
+} from "@mui/icons-material";
 import { Box } from "@mui/system";
 import { UserContext } from "context/UserContext";
 
 import React, { useContext, useEffect, useState } from "react";
 import TextFieldStyled from "components/styled/TextFieldStyled";
 import ContainerStyled from "components/styled/ContainerStyled";
+import { TreeView } from "@mui/lab";
+import { useSnackbar } from "notistack";
 
 export default function CategoryMaster() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const theme = useTheme();
   const { darkMode, baseUrl } = useContext(UserContext);
   const [showField, setShowField] = useState(false);
@@ -41,21 +65,43 @@ export default function CategoryMaster() {
   const [categoryID, setCategoryID] = useState(null);
   const [filteredCategory, setFilteredCategory] = useState([]);
   const [data, setData] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   //item master states
+  console.log(categoryData);
 
-  const [category, setCategory] = React.useState("");
+  const [categories, setCategories] = React.useState([]);
   const [subCategory, setSubCatogery] = React.useState("");
 
+  // const handleToggle = (event, nodeIds) => {
+  //   // setExpanded(nodeIds);
+  // };
+
   useEffect(() => {
-    getAllSuppliers().then((res) => {
-      if (res) {
-        setData(res.data.data);
-        setFilteredCategory(res.data.data);
-      }
-    });
+    setLoading(true);
+    getCategories()
+      .then((res) => {
+        if (res) {
+          if (res.data.status === true) {
+            setCategories(res.data.data);
+            setLoading(false);
+          } else {
+            enqueueSnackbar(
+              "Something Went Wrong! Please Check All Fields Carefully",
+              { variant: "error" }
+            );
+            setLoading(false);
+          }
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(
+          "Something Went Wrong! Please Check All Fields Carefully",
+          { variant: "error" }
+        );
+        setLoading(false);
+      });
   }, []);
 
   const handleCategory = (event) => {
@@ -71,9 +117,26 @@ export default function CategoryMaster() {
   };
   useEffect(() => {
     if (categoryID === null || categoryID === "") return;
-    getCategory(categoryID).then((res) => {
-      setCategoryData(res.data.data);
-    });
+    getCategories(categoryID)
+      .then((res) => {
+        if (res.data.status === true) {
+          setCategoryData(res.data.data);
+          setLoading(false);
+        } else {
+          enqueueSnackbar(
+            "Something Went Wrong! Please Check All Fields Carefully",
+            { variant: "error" }
+          );
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(
+          "Something Went Wrong! Please Check All Fields Carefully",
+          { variant: "error" }
+        );
+        setLoading(false);
+      });
   }, [categoryID]);
 
   const handleShowForm = () => {
@@ -111,42 +174,58 @@ export default function CategoryMaster() {
                 >
                   <Grid container spacing={3}>
                     <Grid item xs={12} lg={12}>
-                      {categoryData === null ? (
+                      {!categoryData === null ? (
                         <Typography variant="h6">No Category Found</Typography>
                       ) : (
-                        <TableContainer component={Paper}>
-                          <Table
-                            sx={{ minWidth: 650 }}
-                            aria-label="simple table"
-                          >
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>Dessert (100g serving)</TableCell>
-                                <TableCell align="right">Calories</TableCell>
-                                <TableCell align="right">
-                                  Fat&nbsp;(g)
-                                </TableCell>
-                                <TableCell align="right">
-                                  Carbs&nbsp;(g)
-                                </TableCell>
-                                <TableCell align="right">
-                                  Protein&nbsp;(g)
-                                </TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              <TableCell component="th" scope="row">
-                                Name
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                Name
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                Name
-                              </TableCell>
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                        <TreeView
+                          aria-label="gmail"
+                          defaultExpanded={["1"]}
+                          defaultCollapseIcon={<ArrowDropDownIcon />}
+                          defaultExpandIcon={<ArrowRightIcon />}
+                          sx={{
+                            height: 264,
+                            flexGrow: 1,
+                            maxWidth: 400,
+                            overflowY: "auto",
+                          }}
+                        >
+                          {categories.map((category, index) => {
+                            return (
+                              <>
+                                <TreeViewItemStyled
+                                  nodeId={category._id}
+                                  key={index}
+                                  labelText={category.categoryName}
+                                  labelInfo={`${category.subCategory.length}`}
+                                  labelIcon={CopyrightIcon}
+                                >
+                                  {category.subCategory.length > 0 && (
+                                    <>
+                                      {category.subCategory.map(
+                                        (subCategory, index) => {
+                                          return (
+                                            <TreeViewItemStyled
+                                              nodeId={subCategory._id}
+                                              key={index++}
+                                              labelText={
+                                                subCategory.subCategoryName
+                                              }
+                                              labelIcon={
+                                                SubdirectoryArrowRightIcon
+                                              }
+                                              color="#1a73e8"
+                                              bgColor="#e8f0fe"
+                                            />
+                                          );
+                                        }
+                                      )}
+                                    </>
+                                  )}
+                                </TreeViewItemStyled>
+                              </>
+                            );
+                          })}
+                        </TreeView>
                       )}
                     </Grid>
                   </Grid>
@@ -219,14 +298,38 @@ export default function CategoryMaster() {
                             <Add />
                           </IconButton>
                         </Box>
+
                         <Typography align="center" variant="subtitle1">
                           Add Category
                         </Typography>
+
+                        <IconButton
+                          sx={{
+                            borderRadius: "15%",
+                            backgroundColor: "transparent",
+                            border: "1px solid rgba(255,255,255,0.5)",
+                            p: 2,
+                          }}
+                          onClick={() => setShowField(!showField)}
+                        >
+                          <Close />
+                        </IconButton>
+                        <IconButton
+                          sx={{
+                            borderRadius: "15%",
+                            backgroundColor: "transparent",
+                            border: "1px solid rgba(255,255,255,0.5)",
+                            p: 2,
+                          }}
+                          onClick={() => setShowField(!showField)}
+                        >
+                          <Check />
+                        </IconButton>
                       </>
                     ) : (
                       <TextFieldStyled
                         label="Category"
-                        onChange={(e) => setCategory(e.target.value)}
+                        onChange={(e) => setCategories(e.target.value)}
                       />
                     )}
                     <Divider sx={{ my: 1 }} light variant="left" />
@@ -268,11 +371,16 @@ export default function CategoryMaster() {
                           fullWidth
                           onChange={(event, value) => {
                             if (value !== null) {
-                              setCategory(value.split(",")[1]);
+                              setCategories(value.split(",")[1]);
                             }
                           }}
                           options={filteredCategory.map(
-                            (option) => option.supplierName + "," + option._id
+                            (option, index) =>
+                              index +
+                              " " +
+                              option.supplierName +
+                              "," +
+                              option._id
                           )}
                           renderInput={(params) => (
                             <TextFieldStyled

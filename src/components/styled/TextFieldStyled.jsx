@@ -6,7 +6,10 @@ const TextFieldStyled = styled(TextField)(({ theme }) => ({
   width: "100%",
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: theme.palette.custom.primary.secondary,
+      borderColor:
+        theme.palette.mode === "dark"
+          ? theme.palette.custom.primary.secondary
+          : theme.palette.custom.primary.main,
     },
 
     "&.Mui-focused fieldset": {

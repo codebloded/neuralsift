@@ -2,6 +2,7 @@ import { Add, CenterFocusStrongRounded, Clear } from "@mui/icons-material";
 import {
   Autocomplete,
   Button,
+  CircularProgress,
   Container,
   Divider,
   Grid,
@@ -44,33 +45,28 @@ export default function Branches() {
   const [clear, setClear] = useState(false);
   const [supplierData, setSupplierData] = useState(null);
   const [supplierID, setSupplierID] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     getAllSuppliers()
       .then((res) => {
         if (res !== null) {
           setData(res.data.data);
           setFilteredSuppliers(res.data.data);
+          setLoading(false);
         }
       })
       .catch((err) => {
-        console.log(err);
+        enqueueSnackbar(
+          "Something Went Wrong! Please Check All Fields Carefully",
+          { variant: "error" }
+        );
+        setLoading(false);
       });
   }, []);
 
   const handleSubmit = async () => {
-    console.log({ gstDoc, gst, address, branchName, supplierID });
-    // if (
-    //   !gstDoc ||
-    //   !gst ||
-    //   !address ||
-    //   !branchName ||
-    //   !supplierID ||
-    //   supplierData.typeOfBranches === "single"
-    // )
-    //   return;
-    console.log("reached");
-
     const formData = new FormData();
     formData.append("gst", gst);
     formData.append("address", address);
@@ -81,7 +77,6 @@ export default function Branches() {
 
     try {
       handleCreateNewBranch(formData).then((res) => {
-        console.log(res);
         if (res.data.status === true) {
           enqueueSnackbar(res.data.message, {
             variant: "success",
@@ -102,7 +97,11 @@ export default function Branches() {
         }
       });
     } catch (err) {
-      console.log(err, err.message);
+      enqueueSnackbar(
+        "Something Went Wrong! Please Check All Fields Carefully",
+        { variant: "error" }
+      );
+      setLoading(false);
     }
   };
   const handleSupplierSearch = (event) => {
@@ -118,11 +117,19 @@ export default function Branches() {
   };
   useEffect(() => {
     if (supplierID === null || supplierID === "") return;
-    getSupplierDetails(supplierID).then((res) => {
-      if (res !== null) {
-        setSupplierData(res.data.data);
-      }
-    });
+    getSupplierDetails(supplierID)
+      .then((res) => {
+        if (res !== null) {
+          setSupplierData(res.data.data);
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(
+          "Something Went Wrong! Please Check All Fields Carefully",
+          { variant: "error" }
+        );
+        setLoading(false);
+      });
   }, [supplierID]);
   return (
     <div
@@ -156,24 +163,39 @@ export default function Branches() {
                 >
                   <Grid container spacing={3}>
                     <Grid item xs={12} lg={12}>
-                      <Autocomplete
-                        freeSolo
-                        onChange={(event, value) => {
-                          if (value !== null) {
-                            setSupplierID(value.split(",")[1]);
-                          }
-                        }}
-                        options={filteredSuppliers.map(
-                          (option) => option.supplierName + "," + option._id
-                        )}
-                        renderInput={(params) => (
-                          <TextField
-                            onChange={handleSupplierSearch}
-                            {...params}
-                            label="Supplier Name"
-                          />
-                        )}
-                      />
+                      {loading ? (
+                        <Stack
+                          direction="column"
+                          spacing={3}
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          <Typography variant="h4">
+                            Fetching Existing Suppliers
+                          </Typography>
+                          <CircularProgress />
+                        </Stack>
+                      ) : (
+                        <Autocomplete
+                          freeSolo
+                          onChange={(event, value) => {
+                            if (value !== null) {
+                              setSupplierID(value.split(",")[1]);
+                            }
+                          }}
+                          options={filteredSuppliers.map(
+                            (option) => option.supplierName + "," + option._id
+                          )}
+                          renderInput={(params) => (
+                            <TextField
+                              onChange={handleSupplierSearch}
+                              {...params}
+                              label="Supplier Name"
+                            />
+                          )}
+                        />
+                      )}
+
                       <Box sx={{ mt: 2 }}>
                         {supplierData !== null && (
                           <>
@@ -279,7 +301,7 @@ export default function Branches() {
                                     />
                                   </label>
                                 )}
-                                {gstDoc !== null ? (
+                                {gstDoc !== null && gstDoc !== undefined ? (
                                   <Stack direction="row" spacing={2}>
                                     <Typography
                                       sx={{ alignSelf: "center" }}

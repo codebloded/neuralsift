@@ -46,6 +46,7 @@ export default function Item() {
   const [umo, setUmo] = React.useState("");
   const [price, setPrice] = React.useState("");
   const [moq, setMoq] = React.useState("");
+  const [loading, setLoading] = useState("");
   console.log(supplierID);
   useEffect(() => {
     getAllSuppliers().then((res) => {

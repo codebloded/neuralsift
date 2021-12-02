@@ -1,60 +1,36 @@
 import Axios from "axios";
 
 const url = "http://localhost:5000";
+// const url = "http://ce6d-103-68-219-34.ngrok.io";
 
 export const getAllSuppliers = async () => {
-  try {
-    const suppliers = await Axios.get(`${url}/supplier/data`);
-
-    if (suppliers) {
-      return suppliers;
-    } else {
-      return [];
-    }
-  } catch (error) {
-    console.log(error.message);
-    return null;
-  }
+  const suppliers = await Axios.get(`${url}/supplier/data`);
+  return suppliers;
 };
 export const getSupplierDetails = async (id) => {
-  try {
-    const data = await Axios.get(`${url}/supplier/${id}`);
-
-    return data;
-  } catch (error) {
-    console.log(error.message);
-    return null;
-  }
+  const data = await Axios.get(`${url}/supplier/${id}`);
+  return data;
 };
 
 export const handleCreateNewBranch = (formData) => {
-  try {
-    const data = Axios.post(`${url}/new/branch`, formData);
-    return data;
-  } catch (error) {
-    console.log(error.message);
-    return null;
-  }
+  const data = Axios.post(`${url}/new/branch`, formData);
+  return data;
 };
 
-export const getCategory = async () => {
-  try {
-    const data = await Axios.get(`${url}/category`);
-
-    return data;
-  } catch (error) {
-    console.log(error.message);
-    return null;
-  }
+export const getCategories = async () => {
+  const data = await Axios.get(`${url}/data/category`);
+  return data;
 };
 
 export const getSpecificCategory = async (id) => {
-  try {
-    const data = await Axios.get(`${url}/category/${id}`);
+  const data = await Axios.get(`${url}/category/${id}`);
 
-    return data;
-  } catch (error) {
-    console.log(error.message);
-    return null;
-  }
+  return data;
+};
+
+export const createNewSupplier = async (formData) => {
+  const data = await Axios.post(`${url}/new/supplier`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
 };

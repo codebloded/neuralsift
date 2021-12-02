@@ -340,7 +340,12 @@ export default function MiniVariant() {
           style={{
             minHeight: "100vh",
             height: "100%",
+            width: "100%",
             marginTop: "6em",
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? theme.palette.custom.primary.main
+                : theme.palette.custom.primary.secondary,
           }}
         >
           <Outlet />
