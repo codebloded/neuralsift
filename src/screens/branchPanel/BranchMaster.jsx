@@ -155,7 +155,7 @@ export default function Branches() {
                   }}
                 >
                   <Grid container spacing={3}>
-                    <Grid item xs={12} lg={6}>
+                    <Grid item xs={12} lg={12}>
                       <Autocomplete
                         freeSolo
                         onChange={(event, value) => {

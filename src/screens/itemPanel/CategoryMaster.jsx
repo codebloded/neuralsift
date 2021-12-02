@@ -12,13 +12,19 @@ import {
   IconButton,
   Paper,
   useTheme,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  Table,
+  TableBody,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import PaperStyled from "components/styled/PaperStyled";
 // import { ToastContainer,  } from "react-toastify";
 
 import Axios from "axios";
-import { getAllSuppliers, getSupplierDetails } from "api/apis";
+import { getAllSuppliers, getCategory } from "api/apis";
 import { Add, CenterFocusStrongRounded, Clear } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import { UserContext } from "context/UserContext";
@@ -31,9 +37,9 @@ export default function CategoryMaster() {
   const theme = useTheme();
   const { darkMode, baseUrl } = useContext(UserContext);
   const [showField, setShowField] = useState(false);
-  const [supplierData, setSupplierData] = useState(null);
-  const [supplierID, setSupplierID] = useState(null);
-  const [filteredSuppliers, setFilteredSuppliers] = useState([]);
+  const [categoryData, setCategoryData] = useState(null);
+  const [categoryID, setCategoryID] = useState(null);
+  const [filteredCategory, setFilteredCategory] = useState([]);
   const [data, setData] = useState([]);
 
   const [showForm, setShowForm] = useState(false);
@@ -42,33 +48,33 @@ export default function CategoryMaster() {
 
   const [category, setCategory] = React.useState("");
   const [subCategory, setSubCatogery] = React.useState("");
-  console.log(supplierID);
+
   useEffect(() => {
     getAllSuppliers().then((res) => {
       if (res) {
         setData(res.data.data);
-        setFilteredSuppliers(res.data.data);
+        setFilteredCategory(res.data.data);
       }
     });
   }, []);
 
-  const handleSupplierSearch = (event) => {
+  const handleCategory = (event) => {
     if (event.target.value === "") {
-      setFilteredSuppliers(data);
+      setFilteredCategory(data);
     } else {
       const newData = data.filter((supplier) => {
         return supplier.supplierName.includes(event.target.value);
       });
-      setFilteredSuppliers(newData);
+      setFilteredCategory(newData);
     }
-    setSupplierID(event.target.value);
+    setCategoryID(event.target.value);
   };
   useEffect(() => {
-    if (supplierID === null || supplierID === "") return;
-    getSupplierDetails(supplierID).then((res) => {
-      setSupplierData(res.data.data);
+    if (categoryID === null || categoryID === "") return;
+    getCategory(categoryID).then((res) => {
+      setCategoryData(res.data.data);
     });
-  }, [supplierID]);
+  }, [categoryID]);
 
   const handleShowForm = () => {
     setShowForm(!showForm);
@@ -104,25 +110,44 @@ export default function CategoryMaster() {
                   }}
                 >
                   <Grid container spacing={3}>
-                    <Grid item xs={12} lg={6}>
-                      <Autocomplete
-                        freeSolo
-                        onChange={(event, value) => {
-                          if (value !== null) {
-                            setSupplierID(value.split(",")[1]);
-                          }
-                        }}
-                        options={filteredSuppliers.map(
-                          (option) => option.supplierName + "," + option._id
-                        )}
-                        renderInput={(params) => (
-                          <TextField
-                            onChange={handleSupplierSearch}
-                            {...params}
-                            label="Supplier Name"
-                          />
-                        )}
-                      />
+                    <Grid item xs={12} lg={12}>
+                      {categoryData === null ? (
+                        <Typography variant="h6">No Category Found</Typography>
+                      ) : (
+                        <TableContainer component={Paper}>
+                          <Table
+                            sx={{ minWidth: 650 }}
+                            aria-label="simple table"
+                          >
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Dessert (100g serving)</TableCell>
+                                <TableCell align="right">Calories</TableCell>
+                                <TableCell align="right">
+                                  Fat&nbsp;(g)
+                                </TableCell>
+                                <TableCell align="right">
+                                  Carbs&nbsp;(g)
+                                </TableCell>
+                                <TableCell align="right">
+                                  Protein&nbsp;(g)
+                                </TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <TableCell component="th" scope="row">
+                                Name
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                Name
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                Name
+                              </TableCell>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      )}
                     </Grid>
                   </Grid>
                 </ContainerStyled>
@@ -243,17 +268,17 @@ export default function CategoryMaster() {
                           fullWidth
                           onChange={(event, value) => {
                             if (value !== null) {
-                              setSupplierID(value.split(",")[1]);
+                              setCategory(value.split(",")[1]);
                             }
                           }}
-                          options={filteredSuppliers.map(
+                          options={filteredCategory.map(
                             (option) => option.supplierName + "," + option._id
                           )}
                           renderInput={(params) => (
                             <TextFieldStyled
-                              onChange={handleSupplierSearch}
+                              onChange={handleCategory}
                               {...params}
-                              label="Supplier Name"
+                              label="Category"
                             />
                           )}
                         />
