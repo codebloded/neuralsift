@@ -36,3 +36,25 @@ export const handleCreateNewBranch = (formData) => {
     return null;
   }
 };
+
+export const getCategory = async () => {
+  try {
+    const data = await Axios.get(`${url}/category`);
+
+    return data;
+  } catch (error) {
+    console.log(error.message);
+    return null;
+  }
+};
+
+export const getSpecificCategory = async (id) => {
+  try {
+    const data = await Axios.get(`${url}/category/${id}`);
+
+    return data;
+  } catch (error) {
+    console.log(error.message);
+    return null;
+  }
+};
